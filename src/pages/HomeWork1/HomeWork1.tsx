@@ -16,7 +16,7 @@ export const HomeWork1 = () => {
       <span>
         <p>Кость 1-6</p>
         <button onClick={rollDice1_6}>Бросок</button>
-        <p>Результат: `${result}`</p>
+        <p>Результат: {result}</p>
       </span>
     </div>
   </div>;
