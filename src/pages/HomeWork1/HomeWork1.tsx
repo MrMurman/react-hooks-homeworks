@@ -1,12 +1,12 @@
 import { useState } from "react";
 
+const randomize = (min: number, max: number): number => {
+  return Math.floor(Math.random() * (max - min + 1)) + min
+}
+
 export const HomeWork1 = () => {
 
   const [result, setResult] = useState<number>()
-
-  const randomize = (min: number, max: number): number => {
-    return Math.floor(Math.random() * (max - min + 1)) + min
-  } 
 
   const rollDice1_6 = () => setResult(randomize(1, 6)) 
 
