@@ -1,67 +1,85 @@
 import { useEffect, useState } from "react";
 import React from "react";
 
+const isElementScrollable = (element: Element) => {
+  return element.scrollHeight > element.clientHeight ? true : false;
+};
+
+const getTheClosestScrollableParentElement = (
+  element: Element
+): Element | null => {
+  const parent = element.parentElement;
+
+  if (!parent) {
+    return null;
+  }
+
+  if (isElementScrollable(parent)) {
+    return parent;
+  }
+
+  return getTheClosestScrollableParentElement(parent);
+};
+
+const getScrollProgressPercentage = (element: Element) => {
+  const scrollHeight = element.scrollHeight;
+  const scrollTop = element.scrollTop;
+  const clientHeight = element.clientHeight;
+
+  const scrollPercentage = Math.round(
+    (scrollTop / (scrollHeight - clientHeight)) * 100
+  );
+
+  return scrollPercentage;
+};
+
 export const HomeWork2 = () => {
+  const [scrollProgress, setScrollProgress] = useState(0);
 
-  const [scrollProgress, setScrollProgress] = useState(0)
-  const scrollWidget = document.querySelector('.scroll')!
-
-  const isElementScrollable = (element: Element) => {
-    return element.scrollHeight > element.clientHeight ? true : false
-  }
-
-  const getTheClosestScrollableParentElement = (element: any):any => {
-    
-    if (!element) {
-      console.log('there is no element')
-      return null
-    }
-
-    if (isElementScrollable(element)) {
-      console.log('element is scrollable', element)
-
-      return element
-    }
-    console.log('element is not scrollable, going round 2', element)
-
-     return getTheClosestScrollableParentElement(element.parentElement)
-  }
-
-  const getScrollProgressPercentage = (element: Element) => {
-      const scrollHeight = element.scrollHeight
-      const scrollTop = element.scrollTop
-      const clientHeight = element.clientHeight
-
-      console.log('scrollHeight', scrollHeight)
-      console.log('scrollTop', scrollTop)
-      console.log('clientHeight', clientHeight)
-
-      const scrollPercentage = Math.round((scrollTop / (scrollHeight - clientHeight)) * 100)
-      setScrollProgress(scrollPercentage)
-
-  }
   useEffect(() => {
-    const scrollableElement = getTheClosestScrollableParentElement(scrollWidget)
-    if (scrollableElement) {
-
-      window.addEventListener('scroll', () => getScrollProgressPercentage(scrollableElement), true ) 
+    const scrollWidget = document.querySelector(".scroll");
+    if (!scrollWidget) {
+      console.error("widget not found");
+      return;
     }
-    window.addEventListener('scroll', () => getScrollProgressPercentage(scrollableElement), true)
-  }, [])
+
+    const scrollableElement =
+      getTheClosestScrollableParentElement(scrollWidget);
+
+    if (!scrollableElement) {
+      console.error("no scrollable parent found");
+      return;
+    }
+
+    const handleScroll = () => {
+      const scrollProgress = getScrollProgressPercentage(scrollableElement);
+
+      setScrollProgress(scrollProgress);
+    };
+
+    scrollableElement.addEventListener("scroll", handleScroll, true);
+
+    return () => {
+      scrollableElement.removeEventListener("scroll", handleScroll, true);
+    };
+  }, []);
 
   return (
-    <div className="container"
+    <div
+      className="container"
       style={{
-        width: '100%',
+        width: "100%",
       }}
     >
-      <div style={{
-        border: '3px solid black',
-        padding: '5px',
-        borderRadius: '10px',
-        position: 'fixed'
-      }} 
-      className="scroll">
+      <div
+        style={{
+          border: "3px solid black",
+          padding: "5px",
+          borderRadius: "10px",
+          position: "fixed",
+        }}
+        className="scroll"
+      >
         <h2>Scroll progress widget</h2>
         <p>{scrollProgress} % scrolled</p>
       </div>
@@ -1068,7 +1086,6 @@ export const HomeWork2 = () => {
         <li></li>
         <li></li>
       </ul>
-
     </div>
   );
 };
