@@ -1,0 +1,27 @@
+.thCell > th {
+    background: #D3D3D3;
+    text-align: center;
+    padding: 20px 0;
+    border: 1px solid gray;
+}
+
+.tdCell > tr > td {
+    padding: 5px;
+    border: 1px solid gray;
+}
+
+.firstCol {
+    min-width: 100px;
+}
+
+.secondCol {
+    min-width: 100px;
+}
+
+.lastCol {
+    width: 100%;
+}
+
+.button {
+    padding: 5px;
+}
